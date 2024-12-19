@@ -2,9 +2,8 @@ const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   e2e: {
-    "baseUrl": "https://www.saucedemo.com/",
-    "screenshotsFolder": "cypress/screenshots",
-    "videosFolder": "cypress/videos",
+    baseUrl: "https://www.saucedemo.com/",
+    video: true,
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },

@@ -366,7 +366,7 @@ describe('Registration Form validation', () => {
             .should('be.disabled');
         });
         
-        it('validate register button is disabled', () => {
+        it('successful registration', () => {
             cy.get(selectors.nameField)
             .type('Iryna');
         

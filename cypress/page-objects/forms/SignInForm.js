@@ -31,6 +31,14 @@ class SignInForm {
     clickLoginButton() {
         this.loginButton.click();
     }
+
+    loginWithCredentials(email, password) {
+        this.emailField.type(email);
+        this.passwordField.type(password);
+        this.loginButton.click();
+    }
+
+
 }
 
 export default new SignInForm();

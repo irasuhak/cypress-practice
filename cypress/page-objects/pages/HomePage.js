@@ -7,13 +7,12 @@ class HomePage {
         return cy.get('.header_signin');
     }
 
+    get clickExpensesBtn() {
+        return cy.get('body > app-root > app-global-layout > div > div > div > app-panel-layout > div > div > div > div.col-3.d-none.d-lg-block.sidebar-wrapper > nav > a:nth-child(2)');
+    }
+
     openPage() {
-        cy.visit('https://qauto.forstudy.space', {
-            auth: {
-                username: 'guest',
-                password: 'welcome2qauto',
-            },
-        });
+        cy.visit('https://guest:welcome2qauto@qauto.forstudy.space')
     }
 
     openSignUpFrom() {
@@ -22,6 +21,10 @@ class HomePage {
 
     openSignInFrom() {
         this.signInButton.click();
+    }
+
+    openExpensesButton(){
+        this.clickExpensesBtn.click();
     }
 }
 

@@ -24,6 +24,10 @@ class AddCarForm {
         return cy.get('.close')
     }
 
+    get addNewCarButton() {
+        return cy.get('.panel-page_heading button');
+    }
+
     selectBrand(brand) {
         this.brandDropdown.select(brand);
     }
@@ -46,6 +50,15 @@ class AddCarForm {
 
     closeForm() {
         this.closeButton.click();
+    }
+
+    addNewCarByBrandAndModel(brand, model) {
+        this.addNewCarButton.click();
+        this.brandDropdown.select(brand);
+        this.modelDropdown.select(model);
+        this.mileageField.type(1000);
+        this.submitAddingCarButton.click();
+        this.submitAddingCarButton.should('not.be.visible');
     }
     
 }

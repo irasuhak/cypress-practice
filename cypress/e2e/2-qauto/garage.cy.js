@@ -1,7 +1,6 @@
 import HomePage from "../../page-objects/pages/HomePage";
 import SignInForm from "../../page-objects/forms/SignInForm";
 import GaragePage from "../../page-objects/pages/GaragePage";
-import AddCarForm from "../../page-objects/forms/AddCarForm";
 import ExpensesPage from "../../page-objects/pages/ExpensesPage";
 
 describe('Garage and Expenses Page Tests', () => {
@@ -18,43 +17,103 @@ describe('Garage and Expenses Page Tests', () => {
             HomePage.openSignInFrom();
             SignInForm.loginWithCredentials('irynasuhak+1@gmail.com', 'Password1!@');
         })
+        
 
-        it('Cancel adding a car', () => {
+        it('Add Auti TT car to the garage', () => {
             GaragePage.clickAddNewCar();
 
-            AddCarForm.selectBrand('BMW');
-            AddCarForm.selectModel('5');
-            AddCarForm.enterMileage(2000);
-            AddCarForm.cancelForm();
+            GaragePage.selectBrand('Audi');
+            GaragePage.selectModel('TT');
+            GaragePage.enterMileage(1500);
+            GaragePage.submitForm();
 
-            //GaragePage.addedCars.should('not.exist', 'BMW 5');
-        });
-
-        it('Add a new car to the garage', () => {
-            GaragePage.clickAddNewCar();
-
-            AddCarForm.selectBrand('Audi');
-            AddCarForm.selectModel('TT');
-            AddCarForm.enterMileage(1500);
-            AddCarForm.submitForm();
-
+            GaragePage.verifySuccessAlert('Car added');
             GaragePage.addedCars.should('have.length.greaterThan', 0);
             GaragePage.verifyLastAddedCarByName('Audi TT');
+        })
+
+        it('Add BMW X6 car to the garage', () => {
+            GaragePage.addNewCarByBrandAndModel('BMW', 'X6');
+
+            GaragePage.verifySuccessAlert('Car added');
+            GaragePage.addedCars.should('have.length.greaterThan', 0);
+            GaragePage.verifyLastAddedCarByName('BMW X6');
+        })
+
+        it('Add Ford Mondeo car to the garage', () => {
+            GaragePage.addNewCarByBrandAndModel('Ford', 'Mondeo');
+
+            GaragePage.verifySuccessAlert('Car added');
+            GaragePage.addedCars.should('have.length.greaterThan', 0);
+            GaragePage.verifyLastAddedCarByName('Ford Mondeo');
+        })
+
+        it('Add Porsche Cayenne car to the garage', () => {
+            GaragePage.addNewCarByBrandAndModel('Porsche', 'Cayenne');
+
+            GaragePage.verifySuccessAlert('Car added');
+            GaragePage.addedCars.should('have.length.greaterThan', 0);
+            GaragePage.verifyLastAddedCarByName('Porsche Cayenne');
+        })
+
+        it('Add Fiat Panda car to the garage', () => {
+            GaragePage.addNewCarByBrandAndModel('Fiat', 'Panda');
+
+            GaragePage.verifySuccessAlert('Car added');
+            GaragePage.addedCars.should('have.length.greaterThan', 0);
+            GaragePage.verifyLastAddedCarByName('Fiat Panda');
+        })
+
+        it('Empty mileage field', () => {
+            GaragePage.clickAddNewCar();
+
+            GaragePage.selectBrand('Fiat');
+            GaragePage.selectModel('Scudo');
+            GaragePage.mileageField.focus();
+            GaragePage.mileageField.blur();
+            GaragePage.verifyError('Mileage cost required')
+            GaragePage.verifySubmitButtonDisabled();            
         });
+
+         it('Input negative number in mileage field', () => {
+            GaragePage.clickAddNewCar();
+
+            GaragePage.selectBrand('Ford');
+            GaragePage.selectModel('Fusion');
+            GaragePage.enterMileage(-20);
+            GaragePage.mileageField.blur();
+            GaragePage.verifyError('Mileage has to be from 0 to 999999')
+            GaragePage.verifySubmitButtonDisabled();            
+        });
+        
+        it('Input number more 999999 in mileage field', () => {
+            GaragePage.clickAddNewCar();
+
+            GaragePage.selectBrand('Audi');
+            GaragePage.selectModel('A8');
+            GaragePage.enterMileage(1000000);
+            GaragePage.mileageField.blur();
+            GaragePage.verifyError('Mileage has to be from 0 to 999999')
+            GaragePage.verifySubmitButtonDisabled();            
+        });
+        
+        it('Cancel adding a car', () => {
+            GaragePage.clickAddNewCar();
+        
+            GaragePage.selectBrand('BMW');
+            GaragePage.selectModel('5');
+            GaragePage.enterMileage(2000);
+            GaragePage.cancelForm();
+        
+            GaragePage.verifyCarNotAdded('BMW 5');
+        })
 
         it('Close Add car form', () => {
             GaragePage.clickAddNewCar();
 
-            AddCarForm.closeForm();
-            AddCarForm.brandDropdown.should('not.exist');
+            GaragePage.closeForm();
+            GaragePage.brandDropdown.should('not.exist');
         });
-
-        // it('remove', () => {
-
-        //     GaragePage.removeAllCars()
-    
-        // });
-
     });
 
     describe.only('Expenses Page Tests', () => {
@@ -68,7 +127,7 @@ describe('Garage and Expenses Page Tests', () => {
         it('Add fuel expense successfully', () => {
             ExpensesPage.clickAddExpenseButton()
             ExpensesPage.selectVehicle('Audi TT');
-            ExpensesPage.enterMileage(4000);
+            ExpensesPage.enterMileage(2000);
             ExpensesPage.enterReportDate('23.01.2025');
            
             ExpensesPage.enterNumberOfLiters(50);
@@ -77,26 +136,14 @@ describe('Garage and Expenses Page Tests', () => {
 
         });
 
-        // it('Cancel adding expense', () => {
-
-        //     // ExpensesPage.clickAddExpenseButton();
-
-        //     // ExpensesPage.selectVehicle('Audi TT');
-        //     // ExpensesPage.enterReportDate('2025-01-21');
-        //     // ExpensesPage.enterMileage(1600);
-        //     // ExpensesPage.enterNumberOfLiters(50);
-        //     // ExpensesPage.enterTotalCost(120);
-        //     // ExpensesPage.clickFormCancelButton();
-
-
-        // });
+    
     });
 
     // after(() => {
     //     GaragePage.removeAllCars();
     //  })
 
-    // it('remove', () => {
+    // it.only('remove', () => {
 
     //     GaragePage.removeAllCars()
 

@@ -126,14 +126,13 @@ describe('Garage and Expenses Page Tests', () => {
 
         it('Add fuel expense successfully', () => {
             ExpensesPage.clickAddExpenseButton()
-            ExpensesPage.selectVehicle('Audi TT');
-            ExpensesPage.enterMileage(2000);
-            ExpensesPage.enterReportDate('23.01.2025');
+            ExpensesPage.selectVehicle('Ford Mondeo');
+            ExpensesPage.enterMileage(4000);
+            ExpensesPage.enterReportDate();
            
             ExpensesPage.enterNumberOfLiters(50);
             ExpensesPage.enterTotalCost(200);
             ExpensesPage.clickSubmitButton();
-
         });
 
     

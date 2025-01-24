@@ -2,7 +2,6 @@ class ExpensesPage {
    
     get addExpenseButton() {
         return cy.get('.panel-page_heading .btn-primary');
-        //return cy.get('body > app-root > app-global-layout > div > div > div > app-panel-layout > div > div > div > div.col-lg-9.main-wrapper > div > app-fuel-expenses > div > div.panel-page_heading.d-flex.flex-column.flex-lg-row > div > button');
     }
     
     get vehicleDropdown() {
@@ -49,13 +48,23 @@ class ExpensesPage {
         this.addExpenseButton.click();
     }
 
-    selectVehicle(vehicleName) {
-        this.vehicleDropdown.select(vehicleName);
+    selectVehicle(vehicleName) { 
+        this.vehicleDropdown
+        .find('option')
+        .contains(vehicleName)  
+        .then(option => {
+            this.vehicleDropdown.select(option.val());  
+        });
     }
 
     enterReportDate(date) {
-        this.reportDataField.clear().type(date, { force: true });
-    }
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0'); 
+        const year = today.getFullYear();
+        const formattedDate = `${day}.${month}.${year}`; 
+        this.reportDataField.clear().type(formattedDate, { force: true });
+        }
 
     openCalendar() {
         this.calendarButton.click();

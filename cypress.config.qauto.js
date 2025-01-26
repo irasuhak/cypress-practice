@@ -7,8 +7,7 @@ module.exports = defineConfig({
     chromeWebSecurity: false,
     env: {
       EMAIL: "irynasuhak+1@gmail.com",
-      PASSWORD: "Password1!@",
-      ALT_BASE_URL: "https://guest:welcome2qauto@qauto2.forstudy.space",
+      PASSWORD: "Password1!@"
     },
     reporter: "mochawesome", 
     reporterOptions: {

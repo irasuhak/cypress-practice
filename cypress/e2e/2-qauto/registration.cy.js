@@ -1,4 +1,7 @@
 /// <reference types="cypress"/>
+import HomePage from "../../page-objects/pages/HomePage";
+import SignUpForm from "../../page-objects/forms/SignUpForm";
+
 
 const selectors = {
     nameField: '#signupName',
@@ -47,7 +50,6 @@ describe('Registration Form validation', () => {
                 password: 'welcome2qauto',
             },
         });
-        cy.contains('Sign up').click();
     });
 
     describe('Name field validation', () => {
@@ -366,7 +368,7 @@ describe('Registration Form validation', () => {
             .should('be.disabled');
         });
         
-        it('validate register button is disabled', () => {
+        it('successful registration', () => {
             cy.get(selectors.nameField)
             .type('Iryna');
         
@@ -390,4 +392,25 @@ describe('Registration Form validation', () => {
             .should('be.visible');
         });
     });
+});
+
+
+describe.only('Registration with POM', () => {        
+    beforeEach(() => {
+        HomePage.openPage();
+        HomePage.openSignUpFrom();
+    });
+
+    it('successful registration', () => {
+        SignUpForm.enterName('Iryna');
+        SignUpForm.enterLastName('Suhak');
+        SignUpForm.enterEmail(randomEmail);
+        SignUpForm.enterPassword(password);
+        SignUpForm.enterRepeatPassword('Password1!@');
+        SignUpForm.clickRegisterButton();
+        
+        cy.contains('Garage')
+        .should('be.visible');
+    });
+    
 });

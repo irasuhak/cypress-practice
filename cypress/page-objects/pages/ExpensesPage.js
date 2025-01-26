@@ -48,6 +48,9 @@ class ExpensesPage {
         return cy.get('.close');
     }
 
+    get errorMessage() {
+        return cy.get('.invalid-feedback');
+    }
     
     get addedFuelExpenses() {
         return cy.get('.expenses_table tbody tr');
@@ -111,12 +114,20 @@ class ExpensesPage {
     }
 
     verifyFuelExpensePopupNotVisible(message) {
-        this.fuelExpensePopup.should('not.exist');
+        this.fuelExpensePopup.should('not.contain.text', 'Fuel expense added');
     }
 
     verifyMileageAlertDanger(expectedMessage) {
         this.mileageAlertDanger.should('be.visible').and('contain.text', expectedMessage)
         .and('have.css', 'border-color', 'rgb(245, 198, 203)');
+    }
+
+    verifyAddButtonDisabled() {
+        this.submitButton.should('be.disabled'); 
+    }
+
+    verifyErrorInput(message) {
+        this.errorMessage.should('be.visible').and('contain.text', message).and('have.css', 'color', 'rgb(220, 53, 69)');
     }
 
     verifyExpenseInTable(parameter) {

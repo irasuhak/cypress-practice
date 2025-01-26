@@ -32,7 +32,10 @@ class SignInForm {
         this.loginButton.click();
     }
 
-    loginWithCredentials(email, password) {
+    loginWithCredentials() {
+        const email = Cypress.env('EMAIL');
+        const password = Cypress.env('PASSWORD');
+
         this.emailField.type(email);
         this.passwordField.type(password);
         this.loginButton.click();

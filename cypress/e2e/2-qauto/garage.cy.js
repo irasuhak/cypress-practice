@@ -4,24 +4,16 @@ import GaragePage from "../../page-objects/pages/GaragePage";
 import ExpensesPage from "../../page-objects/pages/ExpensesPage";
 
 describe('Garage and Expenses Page Tests', () => {
-    before(() => {
-        // HomePage.openPage();
-        // HomePage.openSignInFrom();
-        // SignInForm.loginWithCredentials('irynasuhak+1@gmail.com', 'Password1!@');
-        // GaragePage.removeAllCars();
+    beforeEach(() => {
+        HomePage.openPage();
+        HomePage.openSignInFrom();
+        SignInForm.loginWithCredentials();
     })
     
     describe('Garage Page Tests', () => {
-        beforeEach(() => {
-            HomePage.openPage();
-            HomePage.openSignInFrom();
-            SignInForm.loginWithCredentials('irynasuhak+1@gmail.com', 'Password1!@');
-        })
         
-
         it('Add Audi TT car to the garage', () => {
             GaragePage.clickAddNewCar();
-
             GaragePage.selectBrand('Audi');
             GaragePage.selectModel('TT');
             GaragePage.enterMileage(1500);
@@ -34,7 +26,7 @@ describe('Garage and Expenses Page Tests', () => {
 
         it('Add BMW X6 car to the garage', () => {
             GaragePage.addNewCarByBrandAndModel('BMW', 'X6');
-
+            
             GaragePage.verifySuccessAlert('Car added');
             GaragePage.addedCars.should('have.length.greaterThan', 0);
             GaragePage.verifyLastAddedCarByName('BMW X6');
@@ -42,7 +34,7 @@ describe('Garage and Expenses Page Tests', () => {
 
         it('Add Ford Mondeo car to the garage', () => {
             GaragePage.addNewCarByBrandAndModel('Ford', 'Mondeo');
-
+           
             GaragePage.verifySuccessAlert('Car added');
             GaragePage.addedCars.should('have.length.greaterThan', 0);
             GaragePage.verifyLastAddedCarByName('Ford Mondeo');
@@ -66,40 +58,39 @@ describe('Garage and Expenses Page Tests', () => {
 
         it('Empty mileage field', () => {
             GaragePage.clickAddNewCar();
-
             GaragePage.selectBrand('Fiat');
             GaragePage.selectModel('Scudo');
             GaragePage.mileageField.focus();
             GaragePage.mileageField.blur();
+            
             GaragePage.verifyError('Mileage cost required')
             GaragePage.verifySubmitButtonDisabled();            
         });
 
          it('Input negative number in mileage field', () => {
             GaragePage.clickAddNewCar();
-
             GaragePage.selectBrand('Ford');
             GaragePage.selectModel('Fusion');
             GaragePage.enterMileage(-20);
             GaragePage.mileageField.blur();
+            
             GaragePage.verifyError('Mileage has to be from 0 to 999999')
             GaragePage.verifySubmitButtonDisabled();            
         });
         
         it('Input number more 999999 in mileage field', () => {
             GaragePage.clickAddNewCar();
-
             GaragePage.selectBrand('Audi');
             GaragePage.selectModel('A8');
             GaragePage.enterMileage(1000000);
             GaragePage.mileageField.blur();
+            
             GaragePage.verifyError('Mileage has to be from 0 to 999999')
             GaragePage.verifySubmitButtonDisabled();            
         });
         
         it('Cancel adding a car', () => {
-            GaragePage.clickAddNewCar();
-        
+            GaragePage.clickAddNewCar();        
             GaragePage.selectBrand('BMW');
             GaragePage.selectModel('5');
             GaragePage.enterMileage(2000);
@@ -110,25 +101,15 @@ describe('Garage and Expenses Page Tests', () => {
 
         it('Close Add car form', () => {
             GaragePage.clickAddNewCar();
-
             GaragePage.closeForm();
+            
             GaragePage.brandDropdown.should('not.exist');
         });
-
-        // it.only('remove', () => {
-
-        //     GaragePage.removeAllCars()
-    
-        // });
-        
     });
     
     
     describe('Expenses Page Tests', () => {
         beforeEach(() => {
-            HomePage.openPage();
-            HomePage.openSignInFrom();
-            SignInForm.loginWithCredentials('irynasuhak+1@gmail.com', 'Password1!@');
             HomePage.openExpensesButton();
         });
 
@@ -137,7 +118,6 @@ describe('Garage and Expenses Page Tests', () => {
             ExpensesPage.selectVehicle('Ford Mondeo');
             ExpensesPage.enterMileage(2000);
             ExpensesPage.enterReportDate();
-           
             ExpensesPage.enterNumberOfLiters(50);
             ExpensesPage.enterTotalCost(300);
             ExpensesPage.clickSubmitButton();
@@ -179,7 +159,6 @@ describe('Garage and Expenses Page Tests', () => {
             ExpensesPage.selectVehicle('Ford Mondeo');
             ExpensesPage.enterMileage(1900);
             ExpensesPage.enterReportDate();
-           
             ExpensesPage.enterNumberOfLiters(40);
             ExpensesPage.enterTotalCost(600);
             ExpensesPage.clickFormCancelButton();
@@ -192,25 +171,99 @@ describe('Garage and Expenses Page Tests', () => {
             ExpensesPage.сloseAddExpensesForm();
             
             ExpensesPage.vehicleDropdown.should('not.exist');
-            ExpensesPage.verifyFuelExpensePopupNotVisible('Fuel expense added');
+            ExpensesPage.verifyFuelExpensePopupNotVisible();
         });
 
-        it.only('Add the same mileage to Porsche Cayenne', () => {
+        it('Add the same mileage to Porsche Cayenne', () => {
             ExpensesPage.addFuelExpense('Porsche Cayenne', 1000, 50, 500)
 
             ExpensesPage.verifyMileageAlertDanger('First expense mileage must not be less or equal to car initial mileage. Car initial mileage is 1000');
         });
-    
+
+        it('Add less mileage to Fiat Panda', () => {
+            ExpensesPage.addFuelExpense('Fiat Panda', 800, 50, 500)
+
+            ExpensesPage.verifyMileageAlertDanger('First expense mileage must not be less or equal to car initial mileage. Car initial mileage is 1000');
+        });
+
+        it('Empty Number of liters field', () => {
+            ExpensesPage.clickAddExpenseButton();
+            ExpensesPage.selectVehicle('Ford Mondeo');
+            ExpensesPage.enterMileage(1900);
+            ExpensesPage.enterReportDate;
+            ExpensesPage.numberOfLitersField.focus();
+            ExpensesPage.numberOfLitersField.blur();
+            ExpensesPage.enterTotalCost(50);
+           
+            ExpensesPage.verifyErrorInput('Liters required');
+            ExpensesPage.verifyAddButtonDisabled();            
+        });
+
+        it('Input 0 in Number of liters field', () => {
+            ExpensesPage.clickAddExpenseButton();
+            ExpensesPage.selectVehicle('Ford Mondeo');
+            ExpensesPage.enterMileage(1900);
+            ExpensesPage.enterReportDate;
+            ExpensesPage.enterNumberOfLiters(0);
+            ExpensesPage.enterTotalCost(50);
+           
+            ExpensesPage.verifyErrorInput('Liters has to be from 0.01 to 9999');
+            ExpensesPage.verifyAddButtonDisabled();            
+        });
+
+        it('Input more than 9999 in Number of liters field', () => {
+            ExpensesPage.clickAddExpenseButton();
+            ExpensesPage.selectVehicle('Ford Mondeo');
+            ExpensesPage.enterMileage(1900);
+            ExpensesPage.enterReportDate;
+            ExpensesPage.enterNumberOfLiters(10000);
+            ExpensesPage.enterTotalCost(50);
+            
+            ExpensesPage.verifyErrorInput('Liters has to be from 0.01 to 9999');
+            ExpensesPage.verifyAddButtonDisabled();            
+        });
+
+        it('Empty Total cost field', () => {
+            ExpensesPage.clickAddExpenseButton();
+            ExpensesPage.selectVehicle('Ford Mondeo');
+            ExpensesPage.enterMileage(1900);
+            ExpensesPage.enterReportDate;
+            ExpensesPage.enterNumberOfLiters(50);
+            ExpensesPage.totalCostField.focus();
+            ExpensesPage.totalCostField.blur();
+            
+            ExpensesPage.verifyErrorInput('Total cost required');
+            ExpensesPage.verifyAddButtonDisabled();            
+        });
+
+        it('Input negative number in Total cos field', () => {
+            ExpensesPage.clickAddExpenseButton();
+            ExpensesPage.selectVehicle('Ford Mondeo');
+            ExpensesPage.enterMileage(1900);
+            ExpensesPage.enterReportDate;
+            ExpensesPage.enterNumberOfLiters(20);
+            ExpensesPage.enterTotalCost(-200);
+            
+            ExpensesPage.verifyErrorInput('Total cost has to be from 0.01 to 1000000');
+            ExpensesPage.verifyAddButtonDisabled();            
+        });
+
+        it('Input more 1000000 than in Total cos field', () => {
+            ExpensesPage.clickAddExpenseButton();
+            ExpensesPage.selectVehicle('Ford Mondeo');
+            ExpensesPage.enterMileage(1900);
+            ExpensesPage.enterReportDate;
+            ExpensesPage.enterNumberOfLiters(20);
+            ExpensesPage.enterTotalCost(1000001);
+            
+            ExpensesPage.verifyErrorInput('Total cost has to be from 0.01 to 1000000');
+            ExpensesPage.verifyAddButtonDisabled();            
+        });    
     });
 
-    // after(() => {
-    //     GaragePage.removeAllCars();
-    //  })
-
-    // it('remove', () => {
-
-    //     GaragePage.removeAllCars()
-
-    // });
+    after(() => {
+        cy.visit('panel/garage');
+        GaragePage.removeAllCars();
+    });
 
 });

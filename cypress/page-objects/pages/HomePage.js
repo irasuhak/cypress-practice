@@ -12,7 +12,8 @@ class HomePage {
     }
 
     openPage() {
-        cy.visit('https://guest:welcome2qauto@qauto.forstudy.space')
+        const url = Cypress.env('ALT_BASE_URL') || Cypress.config('baseUrl'); 
+        cy.visit(url);
     }
 
     openSignUpFrom() {

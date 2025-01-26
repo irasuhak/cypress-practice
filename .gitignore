@@ -4,3 +4,4 @@ package.json
 videos
 screenchots
 reports
+cypress/results

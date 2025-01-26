@@ -10,5 +10,12 @@ module.exports = defineConfig({
       PASSWORD: "Password1!@",
       ALT_BASE_URL: "https://guest:welcome2qauto@qauto2.forstudy.space",
     },
+    reporter: "mochawesome", 
+    reporterOptions: {
+      reportDir: "cypress/results", 
+      overwrite: false, 
+      html: true, 
+      json: false, 
+    },
   },
 });

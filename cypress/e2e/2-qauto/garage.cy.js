@@ -8,9 +8,9 @@ describe('Garage and Expenses Page Tests', () => {
         // HomePage.openPage();
         // HomePage.openSignInFrom();
         // SignInForm.loginWithCredentials('irynasuhak+1@gmail.com', 'Password1!@');
-        //GaragePage.removeAllCars();
+        // GaragePage.removeAllCars();
     })
-
+    
     describe('Garage Page Tests', () => {
         beforeEach(() => {
             HomePage.openPage();
@@ -19,7 +19,7 @@ describe('Garage and Expenses Page Tests', () => {
         })
         
 
-        it('Add Auti TT car to the garage', () => {
+        it('Add Audi TT car to the garage', () => {
             GaragePage.clickAddNewCar();
 
             GaragePage.selectBrand('Audi');
@@ -114,27 +114,92 @@ describe('Garage and Expenses Page Tests', () => {
             GaragePage.closeForm();
             GaragePage.brandDropdown.should('not.exist');
         });
-    });
 
-    describe.only('Expenses Page Tests', () => {
-        before(() => {
+        // it.only('remove', () => {
+
+        //     GaragePage.removeAllCars()
+    
+        // });
+        
+    });
+    
+    
+    describe('Expenses Page Tests', () => {
+        beforeEach(() => {
             HomePage.openPage();
             HomePage.openSignInFrom();
             SignInForm.loginWithCredentials('irynasuhak+1@gmail.com', 'Password1!@');
             HomePage.openExpensesButton();
         });
 
-        it('Add fuel expense successfully', () => {
-            ExpensesPage.clickAddExpenseButton()
+        it('Successfully add fuel expense to Ford Mondeo', () => {
+            ExpensesPage.clickAddExpenseButton();
             ExpensesPage.selectVehicle('Ford Mondeo');
-            ExpensesPage.enterMileage(4000);
+            ExpensesPage.enterMileage(2000);
             ExpensesPage.enterReportDate();
            
             ExpensesPage.enterNumberOfLiters(50);
-            ExpensesPage.enterTotalCost(200);
+            ExpensesPage.enterTotalCost(300);
             ExpensesPage.clickSubmitButton();
+
+            ExpensesPage.verifyFuelExpensePopup('Fuel expense added');
+            ExpensesPage.verifyExpenseInTable('2000');
         });
 
+        it('Successfully add fuel expense to Audi TT', () => {
+            ExpensesPage.addFuelExpense('Audi TT', 1800, 20, 150)
+
+            ExpensesPage.verifyFuelExpensePopup('Fuel expense added');
+            ExpensesPage.verifyExpenseInTable('1800');
+        });
+
+        it('Successfully add fuel expense to BMW X6', () => {
+            ExpensesPage.addFuelExpense('BMW X6', 1100, 25, 250)
+
+            ExpensesPage.verifyFuelExpensePopup('Fuel expense added');
+            ExpensesPage.verifyExpenseInTable('1100');
+        });
+
+        it('Successfully add fuel expense to Porsche Cayenne', () => {
+            ExpensesPage.addFuelExpense('Porsche Cayenne', 3000, 50, 500)
+
+            ExpensesPage.verifyFuelExpensePopup('Fuel expense added');
+            ExpensesPage.verifyExpenseInTable('3000');
+        });
+
+        it('Successfully add fuel expense to Fiat Panda', () => {
+            ExpensesPage.addFuelExpense('Fiat Panda', 2200, 30, 350)
+
+            ExpensesPage.verifyFuelExpensePopup('Fuel expense added');
+            ExpensesPage.verifyExpenseInTable('2200');
+        });
+
+        it('Cancel add fuel expense form', () => {
+            ExpensesPage.clickAddExpenseButton();
+            ExpensesPage.selectVehicle('Ford Mondeo');
+            ExpensesPage.enterMileage(1900);
+            ExpensesPage.enterReportDate();
+           
+            ExpensesPage.enterNumberOfLiters(40);
+            ExpensesPage.enterTotalCost(600);
+            ExpensesPage.clickFormCancelButton();
+            
+            ExpensesPage.verifyFuelExpensePopupNotVisible('Fuel expense added');
+        });
+
+        it('Close add fuel expense form', () => {
+            ExpensesPage.clickAddExpenseButton();
+            ExpensesPage.сloseAddExpensesForm();
+            
+            ExpensesPage.vehicleDropdown.should('not.exist');
+            ExpensesPage.verifyFuelExpensePopupNotVisible('Fuel expense added');
+        });
+
+        it.only('Add the same mileage to Porsche Cayenne', () => {
+            ExpensesPage.addFuelExpense('Porsche Cayenne', 1000, 50, 500)
+
+            ExpensesPage.verifyMileageAlertDanger('First expense mileage must not be less or equal to car initial mileage. Car initial mileage is 1000');
+        });
     
     });
 
@@ -142,7 +207,7 @@ describe('Garage and Expenses Page Tests', () => {
     //     GaragePage.removeAllCars();
     //  })
 
-    // it.only('remove', () => {
+    // it('remove', () => {
 
     //     GaragePage.removeAllCars()
 

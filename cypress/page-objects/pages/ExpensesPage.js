@@ -20,6 +20,10 @@ class ExpensesPage {
         return cy.get('#addExpenseMileage');
     }
 
+    get mileageAlertDanger() {
+        return cy.get('.alert.alert-danger');
+    }
+
     get numberOfLitersField() {
         return cy.get('#addExpenseLiters');
     }
@@ -32,12 +36,21 @@ class ExpensesPage {
         return cy.get('.modal-footer .btn.btn-primary');
     }
 
+    get fuelExpensePopup() {
+        return cy.get('app-alert p');
+    }
+
     get formCancelButton() {
-        return cy.get('.btn-secondary');
+        return cy.get('.modal-footer .btn-secondary');
     }
 
     get formCloseButton() {
         return cy.get('.close');
+    }
+
+    
+    get addedFuelExpenses() {
+        return cy.get('.expenses_table tbody tr');
     }
 
     openPage() {
@@ -89,11 +102,36 @@ class ExpensesPage {
         this.formCancelButton.click();
     }
 
-    сloseForm() {
+    сloseAddExpensesForm() {
         this.formCancelButton.click();
     }
 
+    verifyFuelExpensePopup(message) {
+        this.fuelExpensePopup.should('be.visible').and('contain.text', message);
+    }
 
+    verifyFuelExpensePopupNotVisible(message) {
+        this.fuelExpensePopup.should('not.exist');
+    }
+
+    verifyMileageAlertDanger(expectedMessage) {
+        this.mileageAlertDanger.should('be.visible').and('contain.text', expectedMessage)
+        .and('have.css', 'border-color', 'rgb(245, 198, 203)');
+    }
+
+    verifyExpenseInTable(parameter) {
+        this.addedFuelExpenses.should('contain.text', parameter);
+    }
+
+    addFuelExpense(vehicle, mileage, liters, cost) {
+        this.clickAddExpenseButton();
+        this.selectVehicle(vehicle);
+        this.enterMileage(mileage);
+        this.enterReportDate();
+        this.enterNumberOfLiters(liters);
+        this.enterTotalCost(cost);
+        this.clickSubmitButton();
+    }
 }
 
 export default new ExpensesPage();

@@ -151,7 +151,7 @@ describe('Private requests', () => {
         });
     });
 
-    it('Get current user cars [/api/cars]', () => {
+        it('Get current user cars [/api/cars]', () => {
         cy.request({
             method: 'GET',
             url: '/api/cars',

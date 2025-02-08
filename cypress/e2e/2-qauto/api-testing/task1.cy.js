@@ -55,7 +55,7 @@ describe('Intercept', () => {
             });
     })
 
-    it.only('Get car model by id [/api/cars/models/{id}]', () => {
+    it('Get car model by id [/api/cars/models/{id}]', () => {
         cy.request('GET', '/api/cars/models/2')
             .then((response) => {
                 expect(response.status).to.eq(200);

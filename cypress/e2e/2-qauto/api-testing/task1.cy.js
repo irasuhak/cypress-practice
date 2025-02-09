@@ -1,6 +1,5 @@
 /// <reference types="cypress"/>
-import HomePage from "../../../page-objects/pages/HomePage";
-import SignInForm from "../../../page-objects/forms/SignInForm";
+
 
 describe('Public requests', () => {        
 

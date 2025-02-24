@@ -12,7 +12,7 @@ class HomePage {
     }
 
     openPage() {
-        const url = Cypress.env('ALT_BASE_URL') || Cypress.config('baseUrl'); 
+        const url = Cypress.config('baseUrl') || Cypress.env('ALT_BASE_URL'); 
         cy.visit(url);
     }
 
